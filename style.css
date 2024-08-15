@@ -1,0 +1,24 @@
+.bird-container {
+  width: 100%;
+  height: 100px;
+  position: relative;
+}
+
+.bird {
+  width: 50px;
+  height: 50px;
+  background-image: url("./images/Flappy-Bird-PNG-Background-Image.png"); /* Replace with your bird image */
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: moveBird 1s infinite alternate;
+}
+
+@keyframes moveBird {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 0.1px; /* This should be the pixel equivalent */
+  }
+}
