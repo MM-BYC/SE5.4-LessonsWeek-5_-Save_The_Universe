@@ -49,6 +49,8 @@ AlienMotherShip = new Alien("AlienMotherShip", 6, 4, 0.7);
 /*create the EarthDefender Player */
 USSpaceForce = new EarthDefender("USSpaceForce", 20, 5, 0.7);
 
+/* create a attack button*/
+
 /* check child object properties/prototype*/
 console.log(Object.getOwnPropertyNames(AlienMini));
 console.log(Object.getPrototypeOf(AlienMotherShip));
