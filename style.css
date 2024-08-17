@@ -5,9 +5,47 @@ body {
   padding: 0;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: column; /* flex column position-visibility */
+  justify-content: space-between; /* footer at the bottom */
   align-items: center;
+}
+
+/*board statistics*/
+.boardInfo {
+  border: 5px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+#roundNum {
+  flex: 1 1 3000px;
+  text-align: center;
+  font-size: 2.5em;
+  margin: 10px;
+}
+.statistics {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.boardInfo div {
+  border: 5px solid red;
+}
+#alienStats {
+  display: flex;
+  justify-content: center;
+  border-radius: 25px;
+  flex: 1;
+}
+#playerStats {
+  display: flex;
+  justify-content: center;
+
+  border-radius: 25px;
+  flex: 1;
 }
 
 .alienContainer {
@@ -16,8 +54,8 @@ body {
 
 .alien {
   /* border: 5px solid brown; */
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
 
   background-image: url("./images/alienmothership.png"); /* Replace with your bird image */
   background-size: contain;
@@ -36,26 +74,31 @@ body {
 
 /* Player */
 .usSpaceForceContainer {
-  /* border: 5px solid green; */
-  height: 130px;
+  border: 5px solid green;
 }
 .usSpaceForce {
-  /* border: 5px solid lime; */
-  width: 120px;
-  height: 120px;
+  border: 5px solid lime;
+  width: 220px;
+  height: 220px;
   background-image: url("./images/spacecraft.png"); /* Replace with your bird image */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  margin-top: 100px;
 }
 
 /* footer */
 .footer {
+  border: 5px solid blue;
   width: 100%;
   text-align: center;
   background-color: antiquewhite;
+  font-size: 2em;
 }
-.attack {
-  border-radius: 35px;
+.userAction {
+  background-color: aqua;
+  margin: 10px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 15px;
+  font-size: 1em;
 }

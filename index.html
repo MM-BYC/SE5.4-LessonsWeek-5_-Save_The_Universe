@@ -12,6 +12,52 @@
     </head>
 
     <body>
+        <!-- board info -->
+        <div class="boardInfo">
+            <div class="infoStats" id="roundNum">Round <span class="fightRound">??</span></div>
+            <div class="infoStats" id="roundNum">Statistics</div>
+
+            <div class="infoStats" id="alienStats">
+                <table class="statistics">
+                    <th>
+                        <h2>ALIEN</h2>
+                    </th>
+                    <tr>
+                        <td id="alienHull">Hull:</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td id="alienFire">Fire Power:</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td id="alienAccuracy">Accuracy:</td>
+                        <td>100</td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="infoStats" id="playerStats">
+                <table class="statistics">
+                    <th>
+                        <h2>USSASSEMBLY</h2>
+                    </th>
+                    <tr>
+                        <td id="playerHull">Hull:</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td id="playerFire">Fire Power:</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td id="playerAccuracy">Accuracy:</td>
+                        <td>100</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
 
         <div class="alienContainer">
             <div class="alien"></div>
@@ -20,8 +66,12 @@
         <div class="usSpaceForceContainer">
             <div class="usSpaceForce"></div>
         </div>
+
+        <!-- use Action buttons -->
         <footer class="footer">
-            <button class="attack" onclick="attack()">Attack</button>
+            <button onclick="start()" class="userAction" id="start">Start</button>
+            <button onclick="alert('Attack')" class="userAction">Fire</button>
+            <button onclick="alert('Retreat' )" class="userAction">Retreat</button>
             <h3>Save The Universe!</h3>
         </footer>
 

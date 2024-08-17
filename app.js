@@ -6,8 +6,7 @@ Battle the aliens as you try to destroy them with your lasers.
 
 There are six alien ships. The aliens' weakness is that they are too logical and attack one at a time: they will wait to see the outcome of a battle before deploying another alien ship. Your strength is that you have the initiative and get to attack first. However, you do not have targeting lasers and can only attack the aliens in order. After you have destroyed a ship, you have the option to make a hasty retreat.
 */
-
-/* create a game character*/
+let round = 0;
 
 class GameCharacter {
   constructor(name, hull, firepower, accuracy) {
@@ -16,15 +15,17 @@ class GameCharacter {
     this.firepower = firepower;
     this.accuracy = accuracy;
 
-    this.attack = this.attack.bind(this); // Binding 'constructor' to the this
+    // this.attack = this.attack.bind(this); // Binding 'constructor' to the this
   }
   /* attack ability */
   attack = () => {
-    console.log(this.randomNumber());
+    const randomNum = randomNumber(); // ?move the random here
+    console.log(this.randomNum);
+    return randomNum;
   };
   /* Random number generator */
   randomNumber = () => {
-    return Math.random() * 10;
+    return Math.floor(Math.random() * 10) + 1;
   };
 }
 
@@ -42,6 +43,7 @@ class EarthDefender extends GameCharacter {
     super(name, hull, firepower, accuracy);
   }
 }
+
 /*create characters  the 2 Aliens*/
 AlienMini = new Alien("AlienMini", 3, 5, 0.5);
 AlienMotherShip = new Alien("AlienMotherShip", 6, 4, 0.7);
@@ -49,7 +51,13 @@ AlienMotherShip = new Alien("AlienMotherShip", 6, 4, 0.7);
 /*create the EarthDefender Player */
 USSpaceForce = new EarthDefender("USSpaceForce", 20, 5, 0.7);
 
-/* create a attack button*/
+/* create a start function*/
+function start() {
+  console.log("start");
+  const fightRound = document.querySelector(".fightRound");
+  round++;
+  fightRound.innerHTML = round;
+}
 
 /* check child object properties/prototype*/
 console.log(Object.getOwnPropertyNames(AlienMini));
