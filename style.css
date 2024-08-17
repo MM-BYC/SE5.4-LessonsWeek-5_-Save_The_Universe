@@ -12,7 +12,7 @@ body {
 
 /*board statistics*/
 .boardInfo {
-  border: 5px solid black;
+  /* border: 5px solid black; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -20,7 +20,7 @@ body {
 }
 
 #roundNum {
-  flex: 1 1 3000px;
+  flex: 1 1 23000px;
   text-align: center;
   font-size: 2.5em;
   margin: 10px;
@@ -38,14 +38,14 @@ body {
   display: flex;
   justify-content: center;
   border-radius: 25px;
-  flex: 1;
+  flex: 1 1 40%;
 }
 #playerStats {
   display: flex;
   justify-content: center;
 
   border-radius: 25px;
-  flex: 1;
+  flex: 1 1 40%;
 }
 
 .alienContainer {
