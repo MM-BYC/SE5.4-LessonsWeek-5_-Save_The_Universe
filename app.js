@@ -108,7 +108,7 @@ let aliens = {
 let currentAlienIndex = 0;
 
 /*create the EarthDefender Player */
-ussAssembly = new EarthDefender("USS Assembly", 20, 5, 0.7);
+ussAssembly = new EarthDefender("USSAssembly", 20, 5, 0.7);
 
 /*-----------------------------------*/
 /* ----- Game Start function --------*/
@@ -117,6 +117,10 @@ ussAssembly = new EarthDefender("USS Assembly", 20, 5, 0.7);
 /*-----------------------------------*/
 document.querySelector("#start").addEventListener("click", function () {
   console.log("start");
+
+  /* clear logActivity */
+  const logContainer = document.querySelector(".logActivity");
+  logContainer.innerHTML = "";
 
   const fightRound = document.querySelector(".fightRound");
   round = 1;
@@ -133,6 +137,8 @@ document.querySelector("#start").addEventListener("click", function () {
   document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
   document.querySelector("#ussAssembly").innerHTML = `${ussAssembly.name}`;
   /*---- load player's statistics -----*/
+  /* generate new random accuracy for loadAlien to give it a fighting chance*/
+  loadAlien.hull = generateRandomNumber(3, 6);
   document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
   document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
   document.querySelector("#alienAccuracy").innerHTML = `${loadAlien.accuracy}`;
@@ -155,7 +161,12 @@ document.querySelector("#start").addEventListener("click", function () {
 document.querySelector("#fire").addEventListener("click", () => {
   /* Fire here */
   fireButton();
-
+  /* 
+The for...in loop iterates over the property names (keys) of the object, and they are strings, not numbers. 
+So, the alienKey variable will be a string, not a number.
+To start the iteration from the second property (which would be alienTwo), 
+use a counter variable to skip the first iteration:
+*/
   if (loadAlien.hull <= 0) {
     let count = 0;
     for (const alienKey in aliens) {
@@ -167,6 +178,8 @@ document.querySelector("#fire").addEventListener("click", () => {
       loadAlien = alien;
       /* update Statistics  */
       document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
+      /* generate new random accuracy for loadAlien to give it a fighting chance*/
+      loadAlien.hull = generateRandomNumber(3, 6);
       document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
       document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
       document.querySelector(
@@ -233,7 +246,19 @@ function fireButton() {
       "#alienAccuracy"
     ).innerHTML = `${loadAlien.accuracy}`;
   } while (ussAssembly.hull > 0 && loadAlien.hull > 0);
+  if (loadAlien.hull === 0) {
+    activityLogger(`${loadAlien.name} HAS BEEN DESTROYED!`);
+  }
 }
+
+/*--------------------------------*/
+/* ----- Game Retreat function ----*/
+/*--------------------------------*/
+document.querySelector("#retreat").addEventListener("click", () => {
+  activityLogger(`********   GAME OVER   **************`);
+  activityLogger(`${ussAssembly.name} chose to RETREAT!`);
+  activityLogger(`*************************************`);
+});
 
 /* check child object properties/prototype*/
 // console.log(Object.getOwnPropertyNames(loadAlien));
