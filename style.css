@@ -62,7 +62,7 @@ body {
   margin-top: 10px;
   height: 100vh;
   width: 40%;
-  border: solid black;
+  /* border: solid black; */
   display: flex;
   justify-content: space-between;
 }
