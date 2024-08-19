@@ -14,13 +14,15 @@
     <body>
         <!-- board info -->
         <div class="boardInfo">
-            <div class="infoStats" id="roundNum">Round <span class="fightRound">??</span></div>
-            <div class="infoStats" id="roundNum">Statistics</div>
+            <div class="roundNum">Round
+                <div class="fightRound">??</div>
+            </div>
+            <div class="roundNum">Statistics</div>
 
-            <div class="infoStats" id="alienStats">
-                <table class="statistics">
+            <div class="parentStats">
+                <table class="statistics" id="alienStats">
                     <th>
-                        <h2>ALIEN</h2>
+                        <h2 id="alienName">alien name</h2>
                     </th>
                     <tr>
                         <td>Hull:</td>
@@ -35,12 +37,9 @@
                         <td id="alienAccuracy">100</td>
                     </tr>
                 </table>
-            </div>
-
-            <div class="infoStats" id="playerStats">
-                <table class="statistics">
+                <table class="statistics" id="ussAssemblyStats">
                     <th>
-                        <h2>USSASSEMBLY</h2>
+                        <h2 id="ussAssembly">player name</h2>
                     </th>
                     <tr>
                         <td>Hull:</td>
@@ -58,21 +57,18 @@
             </div>
 
         </div>
-        <!-- image containers-->
-        <div class="alienContainer">
-            <div class="alien"></div>
+        <div class="grandParent">
+
+            <div class="logActivity">?</div>
+
         </div>
 
-        <div class="usSpaceForceContainer">
-            <div class="usSpaceForce"></div>
-        </div>
 
         <!-- use Action buttons -->
         <footer class="footer">
             <button class="userAction" id="start">Start</button>
             <button class="userAction" id="fire">Fire</button>
             <button onclick="alert('Retreat' )" class="userAction">Retreat</button>
-            <button onclick="alert('ChangeRound' )" class="userAction">Change Round</button>
 
             <h3>Save The Universe!</h3>
         </footer>

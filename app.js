@@ -7,6 +7,23 @@ Battle the aliens as you try to destroy them with your lasers.
 There are six alien ships. The aliens' weakness is that they are too logical and attack one at a time: they will wait to see the outcome of a battle before deploying another alien ship. Your strength is that you have the initiative and get to attack first. However, you do not have targeting lasers and can only attack the aliens in order. After you have destroyed a ship, you have the option to make a hasty retreat.
 */
 let round = 0;
+let gameStartedFlag = false;
+let loadAlien;
+
+function activityLogger(message) {
+  /* activityType = start, fire*/
+
+  const logContainer = document.querySelector(".logActivity");
+  const newActivity = document.createElement("div");
+  newActivity.classList.add("${activityType}");
+  newActivity.textContent = message;
+  logContainer.appendChild(newActivity); // Missing this line
+
+  /*auto-scroll as new entries gets inserted*/
+  logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+function removeActivity() {}
 
 // ----------[]
 const generateRandomNumber = (min, max) => {
@@ -20,8 +37,7 @@ class GameCharacter {
     this.firepower = firepower;
     this.accuracy = accuracy;
     /*toggle */
-    this.ussAssemblyTurn = true;
-    this.alienTurn = false;
+    this.turn = false;
 
     // this.attack = this.attack.bind(this); // Binding 'constructor' to the this
   }
@@ -42,21 +58,61 @@ class EarthDefender extends GameCharacter {
   }
 }
 
-/*create characters: name, hull,firepower,accuracy*/
+/*create characters with attributes: name, hull,firepower,accuracy*/
 
 alienOne = new Alien(
-  "miniAlien",
+  "Alien 1",
+  generateRandomNumber(3, 6),
+  generateRandomNumber(2, 4),
+  generateRandomNumber(0.6, 0.8)
+);
+alienTwo = new Alien(
+  "Alien 2",
+  generateRandomNumber(3, 6),
+  generateRandomNumber(2, 4),
+  generateRandomNumber(0.6, 0.8)
+);
+alienThree = new Alien(
+  "Alien 3",
+  generateRandomNumber(3, 6),
+  generateRandomNumber(2, 4),
+  generateRandomNumber(0.6, 0.8)
+);
+alienFour = new Alien(
+  "Alien 4",
+  generateRandomNumber(3, 6),
+  generateRandomNumber(2, 4),
+  generateRandomNumber(0.6, 0.8)
+);
+alienFive = new Alien(
+  "Alien 5",
+  generateRandomNumber(3, 6),
+  generateRandomNumber(2, 4),
+  generateRandomNumber(0.6, 0.8)
+);
+alienSix = new Alien(
+  "Alien 6",
   generateRandomNumber(3, 6),
   generateRandomNumber(2, 4),
   generateRandomNumber(0.6, 0.8)
 );
 
+let aliens = {
+  alienOne,
+  alienTwo,
+  alienThree,
+  alienFour,
+  alienFive,
+  alienSix,
+};
+let currentAlienIndex = 0;
+
 /*create the EarthDefender Player */
-ussAssembly = new EarthDefender("ussAssembly", 20, 5, 0.7);
+ussAssembly = new EarthDefender("USS Assembly", 20, 5, 0.7);
 
 /*-----------------------------------*/
 /* ----- Game Start function --------*/
-/* USSASSEMBLY ussAssemblyTurn=true  */
+/* Uss Assembly ussAssemblyTurn=true  */
 /* ALIEN       alienTurn=false       */
 /*-----------------------------------*/
 document.querySelector("#start").addEventListener("click", function () {
@@ -64,84 +120,128 @@ document.querySelector("#start").addEventListener("click", function () {
 
   const fightRound = document.querySelector(".fightRound");
   round = 1;
+  /* ussAssembly's turn */
+  ussAssembly.turn = true;
+  alienOne.turn = false;
+
+  /*load first alien */
+  const firstAlien = Object.values(aliens)[0];
+  loadAlien = firstAlien;
+
   fightRound.innerHTML = round;
-  /* Load statistics*/
-  document.querySelector("#alienHull").innerHTML = `${alienOne.hull}`;
-  document.querySelector("#alienFire").innerHTML = `${alienOne.firepower}`;
-  document.querySelector("#alienAccuracy").innerHTML = `${alienOne.accuracy}`;
-  document.querySelector("#playerHull").innerHTML = `${USSpaceForce.hull}`;
-  document.querySelector("#playerFire").innerHTML = `${USSpaceForce.firepower}`;
+  /*---- load player's name -----*/
+  document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
+  document.querySelector("#ussAssembly").innerHTML = `${ussAssembly.name}`;
+  /*---- load player's statistics -----*/
+  document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
+  document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
+  document.querySelector("#alienAccuracy").innerHTML = `${loadAlien.accuracy}`;
+  document.querySelector("#playerHull").innerHTML = `${ussAssembly.hull}`;
+  document.querySelector("#playerFire").innerHTML = `${ussAssembly.firepower}`;
   document.querySelector(
     "#playerAccuracy"
-  ).innerHTML = `${USSpaceForce.accuracy}`;
+  ).innerHTML = `${ussAssembly.accuracy}`;
+
+  /* Call activity logger when Game is Not yet started*/
+  if (!gameStartedFlag) {
+    activityLogger("Game Started!");
+    gameStartedFlag = true;
+  }
 });
 
 /*--------------------------------*/
 /* ----- Game Fire function -----*/
 /*--------------------------------*/
 document.querySelector("#fire").addEventListener("click", () => {
-  console.log("fire initiated");
-  console.log(`${ussAssembly.name} toggle is ${ussAssembly.ussAssemblyTurn}`);
+  /* Fire here */
+  fireButton();
 
-  ussAssembly.ussAssemblyTurn
-    ? calculateStatistics(ussAssembly.name)
-    : calculateStatistics(alienOne.name); // ternary operator ( ===)
+  if (loadAlien.hull <= 0) {
+    let count = 0;
+    for (const alienKey in aliens) {
+      if (count === 0) {
+        count++;
+        continue;
+      }
+      const alien = aliens[alienKey];
+      loadAlien = alien;
+      /* update Statistics  */
+      document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
+      document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
+      document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
+      document.querySelector(
+        "#alienAccuracy"
+      ).innerHTML = `${loadAlien.accuracy}`;
+      fireButton();
+    }
+    activityLogger("All Aliens Defeated!");
+  }
 });
 
-/*--------- calculate statistics        ------------------- */
-
-calculateStatistics = (name) => {
-  const randomMath = Math.floor(Math.random() * 10) / 10;
-  console.log(randomMath);
-  switch (name) {
-    case ussAssembly.name:
-      if (randomMath < `${name}`.accuracy) {
-        console.log(`${name} is hit`);
-        /*reduce the alien's hull*/
-        alienOne.hull -= 1;
-        document.querySelector("#alienHull").innerHTML = `${alienOne.hull}`;
-        console.log("hit");
-      } else {
-        console.log("missed");
-      }
-      break;
-    case alienOne.name:
-      if (randomMath < ussAssembly.accuracy) {
-        console.log("${name} is hit");
-        /*reduce the player's hull*/
-        alienOne.hull -= 1;
-        document.querySelector("#playerHull").innerHTML = `${alienOne.hull}`;
-      } else {
-        console.log("missed");
-      }
-      break;
-  }
-};
 /*----------return name and toggle turn ------------------- */
-toggleTurn = () => {
-  switch (true) {
-    case "alienTurn":
-      console.log("alien turn");
-
+toggleTurn = (turnToToggle) => {
+  switch (turnToToggle) {
+    case "ussAssembly.turn":
+      ussAssembly.turn = false;
+      loadAlien.turn = true;
       break;
-  }
-  if (ussAssembly.ussAssemblyTurn) {
-    ussAssembly.ussAssemblyTurn = false; // object properties
-    alienOne.alienTurn = true;
-    return ussAssembly.name;
-  } else if (!ussAssemblyTurn) {
-    ussAssemblyTurn = true;
-    alienTurn = false;
-    return alienOne.name;
+    case "loadAlien.turn":
+      ussAssembly.turn = true;
+      loadAlien.turn = false;
+      break;
+    default:
+      console.error("Invalid turn:", TurnToToggle);
   }
 };
-/* check child object properties/prototype*/
-console.log(Object.getOwnPropertyNames(alienOne));
-console.log(Object.getPrototypeOf(alienOne));
 
-console.log(
-  `${alienOne.name} ${alienOne.hull} ${alienOne.firepower} ${alienOne.accuracy}`
-);
+function fireButton() {
+  console.log(`${ussAssembly.name} turn is ${ussAssembly.turn}`);
+  console.log("fire initiated");
+  activityLogger(`Fire Initiated! from ${ussAssembly.name}`);
+
+  /* Uss Assembly's accuracy = 0.7 */
+  /* loadAlien's accuracy is generated randomly  */
+  do {
+    if (ussAssembly.turn) {
+      if (ussAssembly.accuracy < loadAlien.accuracy) {
+        console.log(`ussAssembly miss!`);
+        activityLogger(`{${ussAssembly.name} miss the shot!`);
+      } else if (ussAssembly.accuracy > loadAlien.accuracy) {
+        console.log(`${loadAlien.name} is hit!`); /* loadAlien HIT! */
+        loadAlien.hull -= 1;
+        document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
+        activityLogger(`${loadAlien.name} is hit! Hull: ${loadAlien.hull}`);
+      }
+      toggleTurn("ussAssembly.turn"); /* set ussAssembly's turn = false  */
+    }
+    if (loadAlien.turn) {
+      if (loadAlien.accuracy < ussAssembly.accuracy) {
+        console.log(`{${loadAlien.name} miss!`);
+        activityLogger(`${loadAlien.name} fires and miss the shot!`);
+      } else if (loadAlien.accuracy > ussAssembly.accuracy) {
+        console.log(`${ussAssembly.name} is hit!`); /* ussAssembly HIT! */
+        ussAssembly.hull -= 1;
+        document.querySelector("#playerHull").innerHTML = `${ussAssembly.hull}`;
+        activityLogger(`${ussAssembly.name} is hit! Hull: ${ussAssembly.hull}`);
+      }
+      toggleTurn("loadAlien.turn"); /* set loadAlien's turn = false  */
+    }
+    /* generate new random accuracy for loadAlien to give it a fighting chance*/
+    loadAlien.accuracy = generateRandomNumber(0.6, 0.8);
+    console.log(`${loadAlien.name} updated accuracy is ${loadAlien.accuracy}`);
+    document.querySelector(
+      "#alienAccuracy"
+    ).innerHTML = `${loadAlien.accuracy}`;
+  } while (ussAssembly.hull > 0 && loadAlien.hull > 0);
+}
+
+/* check child object properties/prototype*/
+// console.log(Object.getOwnPropertyNames(loadAlien));
+// console.log(Object.getPrototypeOf(loadAlien));
+
+// console.log(
+//   `${loadAlien.name} ${loadAlien.hull} ${loadAlien.firepower} ${loadAlien.accuracy}`
+// );
 
 /* set statistics */
 
