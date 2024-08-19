@@ -9,6 +9,7 @@ There are six alien ships. The aliens' weakness is that they are too logical and
 let round = 0;
 let gameStartedFlag = false;
 let loadAlien;
+let gameRetreatFlag = false;
 
 function activityLogger(message) {
   /* activityType = start, fire*/
@@ -123,7 +124,11 @@ document.querySelector("#start").addEventListener("click", function () {
   logContainer.innerHTML = "";
 
   const fightRound = document.querySelector(".fightRound");
-  round = 1;
+  if (gameRetreatFlag) {
+    round = 0;
+    gameRetreatFlag = false;
+  }
+  round += 1;
   /* ussAssembly's turn */
   ussAssembly.turn = true;
   alienOne.turn = false;
@@ -139,6 +144,8 @@ document.querySelector("#start").addEventListener("click", function () {
   /*---- load player's statistics -----*/
   /* generate new random accuracy for loadAlien to give it a fighting chance*/
   loadAlien.hull = generateRandomNumber(3, 6);
+  ussAssembly.hull = 0.7;
+
   document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
   document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
   document.querySelector("#alienAccuracy").innerHTML = `${loadAlien.accuracy}`;
@@ -180,6 +187,8 @@ use a counter variable to skip the first iteration:
       document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
       /* generate new random accuracy for loadAlien to give it a fighting chance*/
       loadAlien.hull = generateRandomNumber(3, 6);
+      ussAssembly.hull = 0.7;
+
       document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
       document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
       document.querySelector(
@@ -230,7 +239,7 @@ function fireButton() {
     if (loadAlien.turn) {
       if (loadAlien.accuracy < ussAssembly.accuracy) {
         console.log(`{${loadAlien.name} miss!`);
-        activityLogger(`${loadAlien.name} fires and miss the shot!`);
+        activityLogger(`${loadAlien.name} return fire and miss the shot!`);
       } else if (loadAlien.accuracy > ussAssembly.accuracy) {
         console.log(`${ussAssembly.name} is hit!`); /* ussAssembly HIT! */
         ussAssembly.hull -= 1;
@@ -255,6 +264,7 @@ function fireButton() {
 /* ----- Game Retreat function ----*/
 /*--------------------------------*/
 document.querySelector("#retreat").addEventListener("click", () => {
+  gameRetreatFlag = true;
   activityLogger(`********   GAME OVER   **************`);
   activityLogger(`${ussAssembly.name} chose to RETREAT!`);
   activityLogger(`*************************************`);
