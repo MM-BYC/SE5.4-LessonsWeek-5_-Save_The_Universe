@@ -143,8 +143,8 @@ document.querySelector("#start").addEventListener("click", function () {
   document.querySelector("#ussAssembly").innerHTML = `${ussAssembly.name}`;
   /*---- load player's statistics -----*/
   /* generate new random accuracy for loadAlien to give it a fighting chance*/
-  loadAlien.hull = generateRandomNumber(3, 6);
-  ussAssembly.hull = 0.7;
+  loadAlien.accuracy = generateRandomNumber(0.6, 0.8);
+  ussAssembly.accuracy = 0.7;
 
   document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
   document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
@@ -166,6 +166,8 @@ document.querySelector("#start").addEventListener("click", function () {
 /* ----- Game Fire function -----*/
 /*--------------------------------*/
 document.querySelector("#fire").addEventListener("click", () => {
+  /* reset gameRetreatFlag */
+  gameRetreatFlag = false;
   /* Fire here */
   fireButton();
   /* 
@@ -177,6 +179,7 @@ use a counter variable to skip the first iteration:
   if (loadAlien.hull <= 0) {
     let count = 0;
     for (const alienKey in aliens) {
+      /* skip alienOne * */
       if (count === 0) {
         count++;
         continue;
@@ -186,8 +189,8 @@ use a counter variable to skip the first iteration:
       /* update Statistics  */
       document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
       /* generate new random accuracy for loadAlien to give it a fighting chance*/
-      loadAlien.hull = generateRandomNumber(3, 6);
-      ussAssembly.hull = 0.7;
+      loadAlien.accuracy = generateRandomNumber(0.6, 0.8);
+      ussAssembly.accuracy = 0.7;
 
       document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
       document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
@@ -264,10 +267,12 @@ function fireButton() {
 /* ----- Game Retreat function ----*/
 /*--------------------------------*/
 document.querySelector("#retreat").addEventListener("click", () => {
-  gameRetreatFlag = true;
-  activityLogger(`********   GAME OVER   **************`);
-  activityLogger(`${ussAssembly.name} chose to RETREAT!`);
-  activityLogger(`*************************************`);
+  if (!gameRetreatFlag) {
+    gameRetreatFlag = true;
+    activityLogger(`********   GAME OVER   **************`);
+    activityLogger(`${ussAssembly.name} chose to RETREAT!`);
+    activityLogger(`*************************************`);
+  }
 });
 
 /* check child object properties/prototype*/
