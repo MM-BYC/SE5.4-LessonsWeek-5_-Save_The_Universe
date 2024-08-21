@@ -31,6 +31,7 @@ const generateRandomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
+//-------///
 class GameCharacter {
   constructor(name, hull, firepower, accuracy) {
     this.name = name;
@@ -42,13 +43,19 @@ class GameCharacter {
 
     // this.attack = this.attack.bind(this); // Binding 'constructor' to the this
   }
+  regenerateProperties() {
+    this.hull = generateRandomNumber(3, 6);
+    this.firepower = generateRandomNumber(2, 4);
+    this.accuracy = generateRandomNumber(0.6, 0.8);
+  }
 }
 
 // create an alien
 class Alien extends GameCharacter {
   constructor(name, hull, firepower, accuracy) {
-    super(name, hull, firepower, accuracy); // super passes the arguments to the constructor of the parent class
+    super(name, hull, firepower, accuracy); // super passes the arguments to the constructor of the parent
     console.log(name);
+    /* at extends */
   }
 }
 
@@ -97,7 +104,7 @@ alienSix = new Alien(
   generateRandomNumber(2, 4),
   generateRandomNumber(0.6, 0.8)
 );
-
+/*create aliens in an object */
 let aliens = {
   alienOne,
   alienTwo,
@@ -129,6 +136,7 @@ document.querySelector("#start").addEventListener("click", function () {
     gameRetreatFlag = false;
   }
   round += 1;
+  fightRound.innerHTML = `${round}`;
   /* ussAssembly's turn */
   ussAssembly.turn = true;
   alienOne.turn = false;
@@ -137,14 +145,16 @@ document.querySelector("#start").addEventListener("click", function () {
   const firstAlien = Object.values(aliens)[0];
   loadAlien = firstAlien;
 
-  fightRound.innerHTML = round;
+  /* regenerate properties for alien and ussAssembly */
+  loadAlien.regenerateProperties();
+  ussAssembly.hull = 20;
+  ussAssembly.firepower = 5;
+  ussAssembly.accuracy = 0.7;
+
   /*---- load player's name -----*/
   document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
   document.querySelector("#ussAssembly").innerHTML = `${ussAssembly.name}`;
   /*---- load player's statistics -----*/
-  /* generate new random accuracy for loadAlien to give it a fighting chance*/
-  loadAlien.accuracy = generateRandomNumber(0.6, 0.8);
-  ussAssembly.accuracy = 0.7;
 
   document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
   document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
@@ -186,17 +196,25 @@ use a counter variable to skip the first iteration:
       }
       const alien = aliens[alienKey];
       loadAlien = alien;
+      /* regenerate properties for alien and ussAssembly */
+      loadAlien.regenerateProperties();
+      ussAssembly.hull = 20;
+      ussAssembly.firepower = 5;
+      ussAssembly.accuracy = 0.7;
       /* update Statistics  */
       document.querySelector("#alienName").innerHTML = `${loadAlien.name}`;
-      /* generate new random accuracy for loadAlien to give it a fighting chance*/
-      loadAlien.accuracy = generateRandomNumber(0.6, 0.8);
-      ussAssembly.accuracy = 0.7;
-
       document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
       document.querySelector("#alienFire").innerHTML = `${loadAlien.firepower}`;
       document.querySelector(
         "#alienAccuracy"
       ).innerHTML = `${loadAlien.accuracy}`;
+      document.querySelector("#playerHull").innerHTML = `${ussAssembly.hull}`;
+      document.querySelector(
+        "#playerFire"
+      ).innerHTML = `${ussAssembly.firepower}`;
+      document.querySelector(
+        "#playerAccuracy"
+      ).innerHTML = `${ussAssembly.accuracy}`;
       fireButton();
     }
     activityLogger("All Aliens Defeated!");
@@ -224,14 +242,14 @@ function fireButton() {
   console.log("fire initiated");
   activityLogger(`Fire Initiated! from ${ussAssembly.name}`);
 
-  /* Uss Assembly's accuracy = 0.7 */
+  /* Uss Assembly's accuracy = 0.7 and be compared with a random # */
   /* loadAlien's accuracy is generated randomly  */
   do {
     if (ussAssembly.turn) {
-      if (ussAssembly.accuracy < loadAlien.accuracy) {
+      if (ussAssembly.accuracy < generateRandomNumber(0, 1)) {
         console.log(`ussAssembly miss!`);
         activityLogger(`{${ussAssembly.name} miss the shot!`);
-      } else if (ussAssembly.accuracy > loadAlien.accuracy) {
+      } else {
         console.log(`${loadAlien.name} is hit!`); /* loadAlien HIT! */
         loadAlien.hull -= 1;
         document.querySelector("#alienHull").innerHTML = `${loadAlien.hull}`;
@@ -240,10 +258,10 @@ function fireButton() {
       toggleTurn("ussAssembly.turn"); /* set ussAssembly's turn = false  */
     }
     if (loadAlien.turn) {
-      if (loadAlien.accuracy < ussAssembly.accuracy) {
+      if (loadAlien.accuracy < generateRandomNumber(0, 1)) {
         console.log(`{${loadAlien.name} miss!`);
         activityLogger(`${loadAlien.name} return fire and miss the shot!`);
-      } else if (loadAlien.accuracy > ussAssembly.accuracy) {
+      } else {
         console.log(`${ussAssembly.name} is hit!`); /* ussAssembly HIT! */
         ussAssembly.hull -= 1;
         document.querySelector("#playerHull").innerHTML = `${ussAssembly.hull}`;
